@@ -1,0 +1,75 @@
+1、问题二
+%将图像按8-1灰度级显示
+clc,clear;
+I=imread('C:\Users\Administrator\Desktop\数字图像处理作业\第二次作业\lena.bmp');%读取图像灰度值数据
+subplot(2,4,1);imshow(I);%显示图像
+title('8bits');hold on;
+I1=I-rem(I,2);%通过将灰度值变为2的倍数，降低灰度级数
+subplot(2,4,2);imshow(I1);%在同一个图上显示变换后的图像
+title('7bits');hold on;
+I2=I-rem(I,4);
+subplot(2,4,3);imshow(I2);
+title('6bits');hold on;
+I3=I-rem(I,8);
+subplot(2,4,4);imshow(I3);
+title('5bits');hold on;
+I4=I-rem(I,16);
+subplot(2,4,5);imshow(I4);
+title('4bits');hold on;
+I5=I-rem(I,32);
+subplot(2,4,6);imshow(I5);
+title('3bits');hold on;
+I6=I-rem(I,64);
+subplot(2,4,7);imshow(I6);
+title('2bits');hold on;
+I7=I-rem(I,128);
+subplot(2,4,8);imshow(I7);
+title('1bits');hold on;
+
+2、问题三
+%求图像灰度均值以及方差
+clc,clear;
+I=imread('C:\Users\Administrator\Desktop\数字图像处理作业\第二次作业\lena.bmp');
+jz=mean2(I);%求二维矩阵均值
+fc=std2(I)^2;%求二维矩阵标准差，平方得到方差
+
+3、问题四
+%三种方式插值放大图像
+I=imread('C:\Users\Administrator\Desktop\数字图像处理作业\第二次作业\lena.bmp');
+myinterp2(I)
+
+function []=myinterp2(I)%自定义无返回值的插值函数
+
+subplot(1,4,1);imshow(I);%显示原图像
+title('original image');hold on;
+I1=imresize(I,[2048,2048],'nearest');%放大图像，用最邻近插值
+subplot(1,4,2);imshow(I1);%在同一图上显示放大后的图像
+title('nearest interpolation');hold on;
+I2=imresize(I,[2048,2048],'bilinear');%放大图像，用双线性插值
+subplot(1,4,3);imshow(I2);
+title('bilinear interpolation');hold on;
+I3=imresize(I,[2048,2048],'bicubic');%放大图像，用双三次插值
+subplot(1,4,4);imshow(I3);
+title('bicubic interpolation');
+
+4、问题五
+%仿射变换主函数
+clc;clear;
+I=imread('C:\Users\Administrator\Desktop\数字图像处理作业\第二次作业\lena.bmp');%读取图像
+rotate(I);%利用自定义函数变换图像并显示
+
+M=imread('C:\Users\Administrator\Desktop\数字图像处理作业\第二次作业\elain1.bmp');
+rotate(M);
+
+function []=rotate(I)%定义图像旋转函数
+A=[1 0 0;1.5 1 0;0 0 1];%声明仿射矩阵
+B=[cos(pi/6) 0.5 0;-0.5 cos(pi/6) 0;0 0 1];
+
+tform=affine2d(A);%创建裁剪变换的结构体
+I1=imwarp(I,tform);%执行仿射变换
+myinterp2(I1);%利用自定义函数插值放大
+
+figure;
+tform=affine2d(B);%创建旋转变换的结构体
+M1=imwarp(I,tform);
+myinterp2(M1);
